@@ -1,0 +1,139 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-ink-900 text-white font-sans antialiased;
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+/* Ambient animated background layer */
+.app-bg {
+  @apply fixed inset-0 -z-10 bg-ink-900;
+}
+.app-bg::before {
+  content: "";
+  @apply absolute inset-0 bg-aurora;
+  animation: floaty 14s ease-in-out infinite;
+}
+.app-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 22px 22px;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-glass;
+  }
+  .glass-strong {
+    @apply bg-white/10 backdrop-blur-2xl border border-white/15 shadow-glass;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full font-medium transition
+      focus:outline-none focus-visible:ring-2 focus-visible:ring-saffron/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-900;
+  }
+  .btn-primary {
+    @apply btn bg-gradient-to-r from-saffron-500 to-indiagreen-500 text-white px-5 py-2.5 shadow-glow hover:brightness-110 active:scale-95;
+  }
+  .btn-ghost {
+    @apply btn glass px-4 py-2 text-white/90 hover:bg-white/10 active:scale-95;
+  }
+  .chip {
+    @apply btn glass px-4 py-2 text-sm text-white/80 hover:text-white hover:bg-white/10;
+  }
+  .chip-active {
+    @apply bg-gradient-to-r from-saffron-500 to-indiagreen-500 text-white border-transparent shadow-glow;
+  }
+  .card {
+    @apply glass rounded-2xl transition duration-300 hover:border-white/20 hover:bg-white/[0.07];
+  }
+  .section-title {
+    @apply font-display font-bold text-2xl sm:text-3xl tracking-tight;
+  }
+  .gradient-text {
+    @apply bg-gradient-to-r from-saffron-400 via-white to-indiagreen-400 bg-clip-text text-transparent;
+  }
+}
+
+/* Equalizer bars used on playing station cards */
+.eq-bar {
+  width: 3px;
+  border-radius: 2px;
+  background: linear-gradient(to top, #FF9933, #138808);
+  animation: equalize 1s ease-in-out infinite;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+/* Hide horizontal scrollbar for carousels while keeping scroll */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Range input styling for volume */
+input[type="range"].volume {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+}
+input[type="range"].volume::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 14px;
+  width: 14px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(255, 153, 51, 0.8);
+}
+input[type="range"].volume::-moz-range-thumb {
+  height: 14px;
+  width: 14px;
+  border: none;
+  border-radius: 50%;
+  background: #fff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
