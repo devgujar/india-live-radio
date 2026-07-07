@@ -69,16 +69,16 @@ export default function About() {
               <div className="flex items-center gap-2 text-white/70">
                 <Award className="h-5 w-5 text-saffron-400" />
                 <span>
-                  <strong className="text-white">9+</strong> awards won
+                  <strong className="text-white">9+</strong> Workplace awards
                 </span>
               </div>
               <div className="flex items-center gap-2 text-white/70">
                 <Bot className="h-5 w-5 text-indiagreen-400" />
-                <span>Copilot GH-300 certified</span>
+                <span>Copilot certified</span>
               </div>
               <div className="flex items-center gap-2 text-white/70">
                 <Sparkles className="h-5 w-5 text-saffron-400" />
-                <span>Agentic AI enthusiast</span>
+                <span>Applied AI enthusiast</span>
               </div>
             </div>
 

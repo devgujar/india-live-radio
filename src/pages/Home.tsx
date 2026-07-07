@@ -44,11 +44,11 @@ export default function Home() {
             favorites. No sign-up required.
           </p>
           <div className="mt-7 flex flex-wrap gap-3">
-            <Link to="/live" className="btn-primary px-6 py-3 text-base">
-              Browse live stations <ArrowRight className="h-4 w-4" />
+            <Link to="/categories" className="btn-primary px-6 py-3 text-base">
+              Explore languages <ArrowRight className="h-4 w-4" />
             </Link>
-            <Link to="/categories" className="btn-ghost px-6 py-3 text-base">
-              Explore languages
+            <Link to="/live" className="btn-ghost px-6 py-3 text-base">
+              Browse live stations
             </Link>
           </div>
           <dl className="mt-8 flex gap-8">
