@@ -9,6 +9,7 @@ const LINKS = [
   { to: "/live", label: "Live Stations" },
   { to: "/categories", label: "Categories" },
   { to: "/cities", label: "Cities" },
+  { to: "/about", label: "About Me" },
 ];
 
 export default function Navbar() {

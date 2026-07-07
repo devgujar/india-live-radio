@@ -10,6 +10,7 @@ import LiveStations from "./pages/LiveStations";
 import Categories from "./pages/Categories";
 import Cities from "./pages/Cities";
 import Favorites from "./pages/Favorites";
+import About from "./pages/About";
 
 export default function App() {
   return (
@@ -36,6 +37,7 @@ export default function App() {
               <Route path="/categories" element={<Categories />} />
               <Route path="/cities" element={<Cities />} />
               <Route path="/favorites" element={<Favorites />} />
+              <Route path="/about" element={<About />} />
               <Route path="*" element={<Home />} />
             </Routes>
           </main>

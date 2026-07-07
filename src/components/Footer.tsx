@@ -29,6 +29,7 @@ export default function Footer() {
               <li><Link to="/categories" className="hover:text-white">Categories</Link></li>
               <li><Link to="/cities" className="hover:text-white">Cities</Link></li>
               <li><Link to="/favorites" className="hover:text-white">Favorites</Link></li>
+              <li><Link to="/about" className="hover:text-white">About Me</Link></li>
             </ul>
           </div>
           <div>
