@@ -89,7 +89,7 @@ export default function LiveStations() {
         </p>
       </header>
 
-      <div className="glass sticky top-[72px] z-30 space-y-4 rounded-2xl p-4">
+      <div className="glass z-30 space-y-4 rounded-2xl p-4">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
           <div className="flex-1">
             <SearchBar value={query} onChange={setQuery} />

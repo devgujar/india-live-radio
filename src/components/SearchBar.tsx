@@ -14,8 +14,8 @@ export default function SearchBar({
   autoFocus = false,
 }: Props) {
   return (
-    <div className="glass flex items-center gap-3 rounded-full px-4 py-3">
-      <Search className="h-5 w-5 shrink-0 text-white/50" />
+    <div className="glass flex w-full items-center gap-2 rounded-full px-3 py-2.5 sm:gap-3 sm:px-4 sm:py-3">
+      <Search className="h-4 w-4 shrink-0 text-white/50 sm:h-5 sm:w-5" />
       <input
         type="search"
         value={value}
@@ -24,7 +24,7 @@ export default function SearchBar({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         aria-label="Search stations"
-        className="w-full bg-transparent text-sm text-white placeholder:text-white/40 focus:outline-none"
+        className="w-full min-w-0 bg-transparent text-sm text-white placeholder:text-white/40 focus:outline-none sm:text-base"
       />
       {value && (
         <button

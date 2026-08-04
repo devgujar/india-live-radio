@@ -6,8 +6,8 @@ import { useFavorites } from "../context/FavoritesContext";
 
 const LINKS = [
   { to: "/", label: "Home", end: true },
-  { to: "/live", label: "Live Stations" },
-  { to: "/categories", label: "Categories" },
+  { to: "/categories", label: "Regional Languages" },
+  { to: "/live", label: "View All Stations" },
   { to: "/cities", label: "Cities" },
   { to: "/about", label: "About Me" },
 ];
@@ -25,7 +25,7 @@ export default function Navbar() {
               <Radio className="h-5 w-5 text-ink-900" />
             </span>
             <span className="font-display text-lg font-bold leading-none">
-              India <span className="gradient-text">Live Radio</span>
+              <span className="gradient-text">Live Radio</span>
             </span>
           </Link>
 

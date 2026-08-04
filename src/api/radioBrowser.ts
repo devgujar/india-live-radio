@@ -105,19 +105,55 @@ async function requestRaw(path: string, signal?: AbortSignal): Promise<RawStatio
 const COMMON_QUERY =
   "hidebroken=true&order=clickcount&reverse=true&is_https=true";
 
+function normalizeUrl(url: string): string {
+  return url
+    .toLowerCase()
+    .replace(/^https?:\/\//, "")
+    .replace(/\/+$/, "")
+    .trim();
+}
+
 function dedupe(stations: Station[]): Station[] {
-  const seen = new Set<string>();
+  const seenUrls = new Set<string>();
+  const seenNames = new Set<string>();
   const out: Station[] = [];
   for (const s of stations) {
-    const key = (s.name + s.url).toLowerCase();
-    if (seen.has(key) || !s.url) continue;
-    seen.add(key);
+    if (!s.url) continue;
+    const urlKey = normalizeUrl(s.url);
+    const nameKey = s.name.trim().toLowerCase().replace(/\s+/g, "");
+    // Same stream (regardless of display name) or same collapsed name is a dupe.
+    if (seenUrls.has(urlKey) || seenNames.has(nameKey)) continue;
+    seenUrls.add(urlKey);
+    seenNames.add(nameKey);
     out.push(s);
   }
   return out;
 }
 
-/** Top Indian stations by popularity. Falls back to sample data on failure. */
+/**
+ * Merge curated samples with remote stations, letting the curated entries win
+ * on any collision (so, e.g., our "Radio Madhuban" is kept and the API's
+ * "radiomadhuban" duplicate is dropped).
+ */
+function mergePreferSamples(
+  remote: Station[],
+  samples: Station[],
+): Station[] {
+  const sampleUrls = new Set(samples.map((s) => normalizeUrl(s.url)));
+  const sampleNames = new Set(
+    samples.map((s) => s.name.trim().toLowerCase().replace(/\s+/g, "")),
+  );
+  const remoteFiltered = remote.filter(
+    (s) =>
+      !sampleUrls.has(normalizeUrl(s.url)) &&
+      !sampleNames.has(s.name.trim().toLowerCase().replace(/\s+/g, "")),
+  );
+  return dedupe([...samples, ...remoteFiltered]);
+}
+
+/** Top Indian stations by popularity. Merges bundled samples so curated
+ *  stations (e.g. Radio Madhuban) always appear, and falls back to samples on
+ *  failure. */
 export async function fetchTopIndianStations(
   limit = 60,
   signal?: AbortSignal,
@@ -127,8 +163,10 @@ export async function fetchTopIndianStations(
       `/json/stations/bycountrycodeexact/IN?${COMMON_QUERY}&limit=${limit}`,
       signal,
     );
-    const mapped = dedupe(raw.map(mapStation)).filter((s) => s.name && s.url);
-    return mapped.length ? mapped : SAMPLE_STATIONS;
+    const remote = dedupe(raw.map(mapStation)).filter((s) => s.name && s.url);
+    if (!remote.length) return SAMPLE_STATIONS;
+    // Curated samples win over any remote duplicate.
+    return mergePreferSamples(remote, SAMPLE_STATIONS);
   } catch {
     return SAMPLE_STATIONS;
   }
@@ -141,20 +179,44 @@ export async function searchStations(
 ): Promise<Station[]> {
   const q = query.trim();
   if (!q) return [];
+  const lower = q.toLowerCase();
+
+  // Local matches across name / city / state / tags / language so queries like
+  // a city name ("Mount Abu") still surface relevant stations.
+  const localMatches = SAMPLE_STATIONS.filter(
+    (s) =>
+      s.name.toLowerCase().includes(lower) ||
+      s.tags.toLowerCase().includes(lower) ||
+      s.city.toLowerCase().includes(lower) ||
+      s.state.toLowerCase().includes(lower) ||
+      s.language.toLowerCase().includes(lower),
+  );
+
   try {
+    // radio-browser's search matches multiple fields at once (name, tags,
+    // state, language) when using the generic query params below.
     const raw = await requestRaw(
       `/json/stations/search?name=${encodeURIComponent(q)}&countrycode=IN&${COMMON_QUERY}&limit=${limit}`,
       signal,
     );
-    return dedupe(raw.map(mapStation)).filter((s) => s.name && s.url);
+    const remote = dedupe(raw.map(mapStation)).filter((s) => s.name && s.url);
+
+    // If a name search found nothing (e.g. the term is a city/state), retry
+    // against the state field before falling back to local data.
+    if (remote.length === 0) {
+      const rawByState = await requestRaw(
+        `/json/stations/search?state=${encodeURIComponent(q)}&countrycode=IN&${COMMON_QUERY}&limit=${limit}`,
+        signal,
+      );
+      const byState = dedupe(rawByState.map(mapStation)).filter(
+        (s) => s.name && s.url,
+      );
+      return mergePreferSamples(byState, localMatches);
+    }
+
+    return mergePreferSamples(remote, localMatches);
   } catch {
-    const lower = q.toLowerCase();
-    return SAMPLE_STATIONS.filter(
-      (s) =>
-        s.name.toLowerCase().includes(lower) ||
-        s.tags.toLowerCase().includes(lower) ||
-        s.city.toLowerCase().includes(lower),
-    );
+    return localMatches;
   }
 }
 

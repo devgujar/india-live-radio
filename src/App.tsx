@@ -11,6 +11,7 @@ import Categories from "./pages/Categories";
 import Cities from "./pages/Cities";
 import Favorites from "./pages/Favorites";
 import About from "./pages/About";
+import Search from "./pages/Search";
 
 export default function App() {
   return (
@@ -38,6 +39,7 @@ export default function App() {
               <Route path="/cities" element={<Cities />} />
               <Route path="/favorites" element={<Favorites />} />
               <Route path="/about" element={<About />} />
+              <Route path="/search" element={<Search />} />
               <Route path="*" element={<Home />} />
             </Routes>
           </main>

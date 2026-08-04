@@ -10,9 +10,6 @@ const TAGS = [
   "Agentic AI",
   "Applied AI Engineering",
 ];
-
-const LLMS = ["Claude Opus", "GPT‑5x", "GPT‑5x Codex", "Gemini‑3x"];
-
 export default function About() {
   return (
     <div className="mx-auto max-w-5xl px-4 pb-40 pt-12 sm:px-6">
@@ -45,23 +42,13 @@ export default function About() {
               Devanand <span className="gradient-text">Gujar</span>
             </h1>
             <p className="mt-5 text-lg leading-relaxed text-white/70">
-              Award-winning professional with{" "}
-              <strong className="text-white">14+ years of experience</strong> in
-              Quality Engineering, Automation and Product Development, recognized
-              with <strong className="text-white">9+ awards</strong> for
-              performance, innovation, impact and teamwork across various
-              organizations. A Microsoft-certified{" "}
-              <strong className="text-white">GitHub Copilot (GH-300)</strong>{" "}
-              professional focused on the practical adoption of Generative AI and
-              Agentic AI in development &amp; QA practices to improve
-              productivity, code quality and delivery — actively experimenting
-              with Applied AI Engineering using LLMs like{" "}
-              {LLMS.map((llm, i) => (
-                <span key={llm}>
-                  <strong className="text-white">{llm}</strong>
-                  {i < LLMS.length - 1 ? ", " : "."}
-                </span>
-              ))}
+              <p>Engineering Graduate with strong experience leading <strong className="text-white">Quality Engineering, Test Automation and software delivery.     </strong>
+              Recognized with <strong className="text-white">9+ awards</strong> for performance, innovation, impact and teamwork across Wolters Kluwer, Citibank, PubMatic, PTC, and Cybage.</p><br/>
+              <p>Expertise in <strong className="text-white">Java coding</strong>, automation framework design and development from scratch using <strong className="text-white">Selenium, Playwright </strong>, TypeScript, and Rest Assured for UI automation and <strong className="text-white">API automation</strong>. Strongly believes in shift-left testing, code reviews and fast feedback loops for higher release confidence.</p><br/>
+              <p>Strong <strong className="text-white">Risk Management, Team Management</strong> and <strong className="text-white">stakeholder management</strong> capabilities with a proven ability to drive quality initiatives across complex enterprise programs. Managed cross-functional globally distributed team of 10+ QA engineers and developers, combining strategic leadership with deep hands-on execution.</p>
+
+              <p><strong className="text-white">Copilot Certified</strong> and leveraging <strong className="text-white">AI tools</strong> like <strong className="text-white">Copilot</strong> and <strong className="text-white">Cursor</strong> to accelerate automation development and engineering productivity. Experienced in designing AI agents for QA and software development process automation. Actively learning and experimenting with Generative AI and Agentic AI using LLMs - Claude Opus, GPT‑5x, GPT‑5x Codex, and Gemini‑3x.</p>
+
             </p>
 
             {/* Quick facts */}

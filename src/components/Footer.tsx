@@ -11,7 +11,7 @@ export default function Footer() {
               <Radio className="h-4.5 w-4.5 text-ink-900" />
             </span>
             <span className="font-display text-base font-bold">
-              India <span className="gradient-text">Live Radio</span>
+              <span className="gradient-text">Live Radio</span>
             </span>
           </div>
           <p className="mt-3 max-w-xs text-sm text-white/55">
@@ -25,8 +25,8 @@ export default function Footer() {
           <div>
             <h4 className="mb-3 font-semibold text-white/90">Explore</h4>
             <ul className="space-y-2 text-white/55">
-              <li><Link to="/live" className="hover:text-white">Live Stations</Link></li>
-              <li><Link to="/categories" className="hover:text-white">Categories</Link></li>
+              <li><Link to="/live" className="hover:text-white">View All Stations</Link></li>
+              <li><Link to="/categories" className="hover:text-white">Regional Languages</Link></li>
               <li><Link to="/cities" className="hover:text-white">Cities</Link></li>
               <li><Link to="/favorites" className="hover:text-white">Favorites</Link></li>
               <li><Link to="/about" className="hover:text-white">About Me</Link></li>
