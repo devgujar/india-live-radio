@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import { fetchTopIndianStations, searchStations } from "../api/radioBrowser";
+import { fetchByLanguage, fetchTopIndianStations, searchStations } from "../api/radioBrowser";
 import { useStations } from "../hooks/useStations";
 import { SAMPLE_STATIONS } from "../data/sampleStations";
 import type { Station } from "../types";
@@ -34,7 +34,12 @@ export default function Home() {
   );
 
   const list = stations.length ? stations : SAMPLE_STATIONS;
-  const trending = useMemo(() => list.slice(0, 8), [list]);
+  const { stations: hindiStations, loading: hindiLoading } = useStations(
+    (signal) => fetchByLanguage("hindi", 60, signal),
+    [],
+  );
+
+  const trending = useMemo(() => hindiStations.slice(0, 8), [hindiStations]);
 
   return (
     <div className="mx-auto max-w-7xl px-4 pb-40 pt-6 sm:px-6">
@@ -109,7 +114,7 @@ export default function Home() {
             View all <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
-        {loading ? (
+        {hindiLoading ? (
           <StationGridSkeleton count={8} />
         ) : (
           <StationGrid stations={trending} />
