@@ -56,7 +56,6 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
   if (!audioRef.current && typeof Audio !== "undefined") {
     audioRef.current = new Audio();
     audioRef.current.preload = "none";
-    audioRef.current.crossOrigin = "anonymous";
   }
 
   const clearReconnectTimer = useCallback(() => {

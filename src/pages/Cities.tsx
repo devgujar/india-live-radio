@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { MapPin } from "lucide-react";
 import { fetchTopIndianStations } from "../api/radioBrowser";
 import { useStations } from "../hooks/useStations";
+import { useProbedStations } from "../hooks/useProbedStations";
 import { CITIES } from "../data/categories";
 import StationGrid from "../components/StationGrid";
 import { StationGridSkeleton } from "../components/Loader";
@@ -22,6 +23,8 @@ export default function Cities() {
       ),
     );
   }, [stations, city]);
+
+  const { stations: playable, probing } = useProbedStations(byCity, 40);
 
   return (
     <div className="mx-auto max-w-7xl px-4 pb-40 pt-10 sm:px-6">
@@ -56,11 +59,11 @@ export default function Cities() {
         <h2 className="mb-5 section-title flex items-center gap-2">
           <MapPin className="h-6 w-6 text-saffron-400" /> {city}
         </h2>
-        {loading ? (
+        {loading || (probing && playable.length === 0) ? (
           <StationGridSkeleton count={8} />
         ) : (
           <StationGrid
-            stations={byCity}
+            stations={playable}
             emptyMessage={`No stations tagged for ${city} yet. Explore live stations or another city.`}
           />
         )}

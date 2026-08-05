@@ -1,9 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import { fetchByLanguage, fetchTopIndianStations, searchStations } from "../api/radioBrowser";
+import { fetchTopIndianStations, searchStations } from "../api/radioBrowser";
 import { useStations } from "../hooks/useStations";
+import { useProbedStations } from "../hooks/useProbedStations";
+import { useTrendingHindi } from "../hooks/useTrendingHindi";
 import { SAMPLE_STATIONS } from "../data/sampleStations";
 import type { Station } from "../types";
 import SearchBar from "../components/SearchBar";
@@ -12,7 +14,7 @@ import StationGrid from "../components/StationGrid";
 import { StationGridSkeleton } from "../components/Loader";
 
 export default function Home() {
-  const { stations, loading } = useStations(
+  const { stations } = useStations(
     (signal) => fetchTopIndianStations(60, signal),
     [],
   );
@@ -32,14 +34,13 @@ export default function Home() {
         : Promise.resolve([] as Station[]),
     [debounced],
   );
+  const { stations: playableResults, probing: resultsProbing } =
+    useProbedStations(results, 24);
 
   const list = stations.length ? stations : SAMPLE_STATIONS;
-  const { stations: hindiStations, loading: hindiLoading } = useStations(
-    (signal) => fetchByLanguage("hindi", 60, signal),
-    [],
-  );
+  const { stations: hindiStations, loading: hindiLoading } =
+    useTrendingHindi(8);
 
-  const trending = useMemo(() => hindiStations.slice(0, 8), [hindiStations]);
 
   return (
     <div className="mx-auto max-w-7xl px-4 pb-40 pt-6 sm:px-6">
@@ -85,11 +86,11 @@ export default function Home() {
 
           {debounced ? (
             <div className="mt-6">
-              {searching ? (
+              {searching || (resultsProbing && playableResults.length === 0) ? (
                 <StationGridSkeleton count={8} />
               ) : (
                 <StationGrid
-                  stations={results}
+                  stations={playableResults}
                   emptyMessage={`No stations match “${debounced}”.`}
                 />
               )}
@@ -117,7 +118,7 @@ export default function Home() {
         {hindiLoading ? (
           <StationGridSkeleton count={8} />
         ) : (
-          <StationGrid stations={trending} />
+          <StationGrid stations={hindiStations} />
         )}
       </section>
 

@@ -2,6 +2,7 @@ import { useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { fetchByLanguage } from "../api/radioBrowser";
 import { useStations } from "../hooks/useStations";
+import { useProbedStations } from "../hooks/useProbedStations";
 import { LANGUAGES } from "../data/categories";
 import StationGrid from "../components/StationGrid";
 import { StationGridSkeleton } from "../components/Loader";
@@ -15,6 +16,7 @@ export default function Categories() {
     (signal) => fetchByLanguage(activeCat.slug, 60, signal),
     [activeCat.slug],
   );
+  const { stations: playable, probing } = useProbedStations(stations, 40);
 
   return (
     <div className="mx-auto max-w-7xl px-4 pb-40 pt-10 sm:px-6">
@@ -52,7 +54,7 @@ export default function Categories() {
         <h2 className="mb-5 section-title">
           {activeCat.emoji} {activeCat.name} stations
         </h2>
-        {loading ? (
+        {loading || (probing && playable.length === 0) ? (
           <StationGridSkeleton count={8} />
         ) : (
           <StationGrid

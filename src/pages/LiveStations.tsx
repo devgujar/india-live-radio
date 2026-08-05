@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { LayoutGrid, List, SlidersHorizontal } from "lucide-react";
 import { fetchTopIndianStations, searchStations } from "../api/radioBrowser";
 import { useStations } from "../hooks/useStations";
+import { useProbedStations } from "../hooks/useProbedStations";
 import { LANGUAGES, GENRES } from "../data/categories";
 import type { Station } from "../types";
 import SearchBar from "../components/SearchBar";
@@ -76,7 +77,9 @@ export default function LiveStations() {
     return list;
   }, [source, language, genre, sort]);
 
-  const isBusy = loading || searching;
+  const { stations: playable, probing } = useProbedStations(filtered, 60, 12);
+
+  const isBusy = loading || searching || (probing && playable.length === 0);
 
   return (
     <div className="mx-auto max-w-7xl px-4 pb-40 pt-10 sm:px-6">
@@ -85,7 +88,7 @@ export default function LiveStations() {
           Live <span className="gradient-text">stations</span>
         </h1>
         <p className="mt-2 text-white/60">
-          {filtered.length} stations streaming live right now.
+          {playable.length} stations streaming live right now.
         </p>
       </header>
 
@@ -170,13 +173,13 @@ export default function LiveStations() {
         {isBusy ? (
           <StationGridSkeleton count={12} />
         ) : view === "grid" ? (
-          <StationGrid stations={filtered} />
+          <StationGrid stations={playable} />
         ) : (
           <motion.div layout className="flex flex-col gap-3">
-            {filtered.map((s, i) => (
+            {playable.map((s, i) => (
               <StationCard key={s.id} station={s} index={i} />
             ))}
-            {filtered.length === 0 && (
+            {playable.length === 0 && (
               <p className="glass rounded-2xl px-6 py-12 text-center text-white/60">
                 No stations found. Try a different search or filter.
               </p>
